@@ -18,91 +18,126 @@ import javafx.collections.FXCollections;
 /**
  *
  * @author AlexC
+ * 
  */
+ 
 public class SalesOrderDAO {
     //Reference for Prepared Statement
+   private static PreparedStatement preparedStatement;
+     
     //Reference for Select all SalesOrder SQL Statement (Will need to join with car table to get all info)
+    private final static String SELECT_ALL_SALES_ORDER_STMT = "SELECT * FROM salesOrder INNERJOIN car ON SalesOrder.vin = purchaseOrder.vin;";
+   
     //Reference for Insert SalesOrder SQL Statement
-    
+    private final static String ADD_SALES_ORDER_STMT = "INSERT INTO salesOrder (id, dateSold, car, priceSold) VALUES (?, ?, ?, ?)"; 
     
     //GET Sales ORDERS
-    //public static ObservableList<SalesOrder> getAllSalesOrderes() throws 
-            //SQLException, ClassNotFoundException {
+    public static ObservableList<SalesOrder> getAllSalesOrderes() throws 
+            SQLException, ClassNotFoundException {
         
-        //try{
+        try{
             
             //Set up Connection
-            
+            DBConnectoin.dbConnect();
             
             //Create Prepared Statement
-           
+           	preparedStatement = DBConnection.getConnection().prepareStatement(SELECT_ALL_SALES_ORDER_STMT);
             
            //Get ResultSet from executeQuery method
-            
+            ResultSet resultSet = perparedStatement.executeQuery();
             
             //Create ObservableList from ResultSet data
-            
+            ObservableList<SalesOrder> salesOrderList = createSalesOrderListFromResultSet(resultSet);
             
             //Return list
+            return salesOrderList;
             
-        //}catch (SQLException e){
-           
+            
+            
+        }catch (SQLException e){
+           	System.out.println("SQL salesOrder select operation has failed" + e;
+            
             //Throw exception
+            throw e;
             
-        //}
-    //}
+        }
+    }
     
     
    //ADD SALES ORDER
-   // public static void addSalesOrder(SalesOrder salesOrder) throws SQLException, ClassNotFoundException{
+    public static void addSalesOrder(SalesOrder salesOrder) throws SQLException, ClassNotFoundException{
     
-        //try{
+        try{
             
             //Set up Connection
-           
+           DBConnection.dbConnect();
             
             //Create Prepared Statement
-           
+            preparedStatement = DBConnection.getConnection().prepareStatement(ADD_SALES_ORDER_STMT);
             
             //Update Prepared Statement
                 // When updating the preparedStatement with the datePurchased you use the following format
                 // preparedStatement.setString(2, Date.valueOf(purchaseOrder.getDatePurchased()) + "");
-        
-            //Run Update
+              preparedStatement.setString(1, salesOrder.getId() + "");
+              preparedStatement.setString(2, Date.valueOf(purchaseOrder.getDatePurchased()) + "");
+              preparedStatement.setString(3, salesOrder.getcar()); //not to sure what to do here for car
+              preparedStatement.setString(4, salesOrder.getpriceOrder() + "");
             
+            
+            //Run Update
+            preparedStatement.executeUpdate();
         
-        //}catch(SQLException e){
+        }catch(SQLException e){
+        	System.out.println("SQL sales order insert operation has failed: " + e);
              
-        //}
+        }
    
-    //}
+    }
     
     
     //Use ResultSet of 'GET ALL SALES ORDERS' to create and return list of sales orders
-     //private static ObservableList<SalesOrder> createSalesOrderFromResultSet(ResultSet resultSet) 
-            //throws SQLException, ClassNotFoundException {
+     private static ObservableList<SalesOrder> createSalesOrderFromResultSet(ResultSet resultSet) 
+          throws SQLException, ClassNotFoundException {
         
         //Create ObservableList
-        
+        ObservableList<SalesOrder> salesOrderList = FXCollections.observableArrayList();
+        	
         
         //Loop through ResultSet and create local variables:
-        //int id, dateSold (see note below on how to do this one), double priceSold,
-            //vin, make, model, color, int mileage, int mpg, double salesPrice
-                //What to do to convert SQL date in Result Date to LocalDate 
-                //LocalDate dateSold = resultSet.getDate("dateSold").toLocalDate();
+        while(resultSet.next()){
             
-            //Create car with local variables 
-                //constructor: Car(vin, year, make model, color, mileage, mpg, salesPrice) 
-    
-            //Create SalesOrder with the created car and rest of the variables
+         //int id, dateSold (see note below on how to do this one), double priceSold,
+         //vin, make, model, color, int mileage, int mpg, double salesPrice
+          int year = resultSet.getInt("year");
+          int id = resultSet.getInt("id");
+          int mileage = resultSet.getInt("milage"); 
+          int mpg = resultSet.getInt("mpg);
+          double salesPrice = resultSet.getDouble("salesPrice");
+          double priceSold = resultSet.getDouble("priceSold");
+          String make = resultSet.getString("make");
+          String model = resultSet.getString("model");
+          String color = resultSet.getString("color");
+          String vin = resultSet.getString("vin");                         
+          LocalDate dateSold = resultSet.getDate("dateSold").toLocalDate();
+                     
+          //Create car with local variables 
+           //constructor: Car(vin, year, make model, color, mileage, mpg, salesPrice)
+               Car car = new Car(vin, year, make model, color, mileage, mpg, salesPrice);
+                                     
+                                     
+               //Create SalesOrder with the created car and rest of the variables
                 //constructor: SalesOrder(id, dateSold, car, priceSold)
-    
-            //Add SalesOrder To List
+                SalesOrders salesOrder = new SalesOrder(id, dateSold, car, priceSold);
+               
+                //Add SalesOrder To List
+                 salesOrderList.add(salesOrder);
+                                     
+            }
+               //Return List
+                 return salesOrderList;
+           
         
-     
-        //Return List
-        
-    //}
+    }
         
     
 }
