@@ -4,6 +4,7 @@
  */
 package daos;
 
+import carlot.DBConnection;
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import models.PurchaseOrder;
@@ -13,11 +14,12 @@ import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.sql.Date;
 import javafx.collections.FXCollections;
+import models.Car;
 
 
 /**
  *
- * @author AlexC
+ * @author Matthew Harris
  * 
  */
  
@@ -38,13 +40,13 @@ public class SalesOrderDAO {
         try{
             
             //Set up Connection
-            DBConnectoin.dbConnect();
+            DBConnection.dbConnect();
             
             //Create Prepared Statement
            	preparedStatement = DBConnection.getConnection().prepareStatement(SELECT_ALL_SALES_ORDER_STMT);
             
            //Get ResultSet from executeQuery method
-            ResultSet resultSet = perparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
             
             //Create ObservableList from ResultSet data
             ObservableList<SalesOrder> salesOrderList = createSalesOrderListFromResultSet(resultSet);
@@ -55,7 +57,7 @@ public class SalesOrderDAO {
             
             
         }catch (SQLException e){
-           	System.out.println("SQL salesOrder select operation has failed" + e;
+           	System.out.println("SQL salesOrder select operation has failed" + e);
             
             //Throw exception
             throw e;
@@ -77,11 +79,11 @@ public class SalesOrderDAO {
             
             //Update Prepared Statement
                 // When updating the preparedStatement with the datePurchased you use the following format
-                // preparedStatement.setString(2, Date.valueOf(purchaseOrder.getDatePurchased()) + "");
+                // preparedStatement.setString(2, Date.valueOf(salesOrder.getDateSold()) + "");
               preparedStatement.setString(1, salesOrder.getId() + "");
-              preparedStatement.setString(2, Date.valueOf(purchaseOrder.getDatePurchased()) + "");
-              preparedStatement.setString(3, salesOrder.getcar()); //not to sure what to do here for car
-              preparedStatement.setString(4, salesOrder.getpriceOrder() + "");
+              preparedStatement.setString(2, Date.valueOf(salesOrder.getDateSold()) + "");
+              preparedStatement.setString(3, salesOrder.getCar()); //not to sure what to do here for car
+              preparedStatement.setString(4, salesOrder.getPriceSold() + "");
             
             
             //Run Update
@@ -111,7 +113,7 @@ public class SalesOrderDAO {
           int year = resultSet.getInt("year");
           int id = resultSet.getInt("id");
           int mileage = resultSet.getInt("milage"); 
-          int mpg = resultSet.getInt("mpg);
+          int mpg = resultSet.getInt("mpg");
           double salesPrice = resultSet.getDouble("salesPrice");
           double priceSold = resultSet.getDouble("priceSold");
           String make = resultSet.getString("make");
@@ -122,12 +124,12 @@ public class SalesOrderDAO {
                      
           //Create car with local variables 
            //constructor: Car(vin, year, make model, color, mileage, mpg, salesPrice)
-               Car car = new Car(vin, year, make model, color, mileage, mpg, salesPrice);
+               Car car = new Car(vin, year, make, model, color, mileage, mpg, salesPrice);
                                      
                                      
                //Create SalesOrder with the created car and rest of the variables
                 //constructor: SalesOrder(id, dateSold, car, priceSold)
-                SalesOrders salesOrder = new SalesOrder(id, dateSold, car, priceSold);
+                SalesOrder salesOrder = new SalesOrder(id, dateSold, car, priceSold);
                
                 //Add SalesOrder To List
                  salesOrderList.add(salesOrder);
