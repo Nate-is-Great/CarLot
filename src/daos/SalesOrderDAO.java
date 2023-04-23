@@ -31,7 +31,7 @@ public class SalesOrderDAO {
     private final static String SELECT_ALL_SALES_ORDER_STMT = "SELECT * FROM salesOrder INNERJOIN car ON SalesOrder.vin = purchaseOrder.vin;";
    
     //Reference for Insert SalesOrder SQL Statement
-    private final static String ADD_SALES_ORDER_STMT = "INSERT INTO salesOrder (id, dateSold, car, priceSold) VALUES (?, ?, ?, ?)"; 
+    private final static String ADD_SALES_ORDER_STMT = "INSERT INTO salesOrder (id, dateSold, vin, priceSold) VALUES (?, ?, ?, ?)"; 
     
     //GET Sales ORDERS
     public static ObservableList<SalesOrder> getAllSalesOrderes() throws 
@@ -82,7 +82,7 @@ public class SalesOrderDAO {
                 // preparedStatement.setString(2, Date.valueOf(salesOrder.getDateSold()) + "");
               preparedStatement.setString(1, salesOrder.getId() + "");
               preparedStatement.setString(2, Date.valueOf(salesOrder.getDateSold()) + "");
-              preparedStatement.setString(3, salesOrder.getCar()); //not to sure what to do here for car
+              preparedStatement.setString(3, salesOrder.getCar().getVin()); 
               preparedStatement.setString(4, salesOrder.getPriceSold() + "");
             
             
@@ -98,7 +98,7 @@ public class SalesOrderDAO {
     
     
     //Use ResultSet of 'GET ALL SALES ORDERS' to create and return list of sales orders
-     private static ObservableList<SalesOrder> createSalesOrderFromResultSet(ResultSet resultSet) 
+     private static ObservableList<SalesOrder> createSalesOrderListFromResultSet(ResultSet resultSet) 
           throws SQLException, ClassNotFoundException {
         
         //Create ObservableList
