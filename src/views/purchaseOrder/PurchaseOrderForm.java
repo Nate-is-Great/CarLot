@@ -13,109 +13,112 @@ import javafx.scene.layout.HBox;
 
 /**
  *
- * @author AlexC, KevinM
+ * @author Padhmasri Baskaran
  */
-public class PurchaseOrderForm extends HBox{
-   
-    private final TextField cost = new TextField();
-    private final TextField vin = new TextField();
-    private final TextField year = new TextField();
-    private final TextField make = new TextField();
-    private final TextField model = new TextField();
-    private final TextField color = new TextField();
-    private final TextField mileage = new TextField();
-    private final TextField mpg = new TextField();
-    private final TextField salesPrice = new TextField();
+public class PurchaseOrderForm extends HBox {
+
+  // Textfields References (cost, vin, year, make, model, mileage, mpg)
+  private final TextField vin;
+  private final TextField year;
+  private final TextField make;
+  private final TextField model;
+  private final TextField color;
+  private final TextField mileage;
+  private final TextField mpg;
+  private final TextField cost;
+
+  // DatePicker Reference (datePurchased)
+  private final DatePicker datePurchased;
+
+  public PurchaseOrderForm() {
+
+    // New GridPane
+    GridPane grid = new GridPane();
+
+    // Grid Styles
+    grid.setHgap(20.0);
+    grid.setVgap(15.0);
+
+    // Add Labels and Textfields to Grid with add(Node, col index, row index)
+    // Row 0: datePurchased label/datepicker, cost label/textfield
+    grid.add(new Label("Date Purchased"), 0, 0);
+    grid.add(this.datePurchased = new DatePicker(), 1, 0);
     
-    //DatePicker Reference (datePurchased)
-    private final DatePicker datePurchased = new DatePicker();
-    
-    
-    public PurchaseOrderForm(){
-        
-        //New GridPane
-        GridPane grid = new GridPane();
-        
-        //Grid Styles
-        grid.setHgap(20);
-        grid.setVgap(15);
-        
-        // Add Labels and Textfields to Grid with add(Node, col index, row index)
-            //Row 0: datePurchased label/datepicker, cost label/textfield 
-            //Row 1: vin label/textfield, year label/textfield, make label/textfield, model label/textfield
-            //Row 2: color label/textfield, mileage label/textfield, mpg label/textfield, salesPrice label/textfield 
-        grid.add(new Label("Date Purchased:"), 0, 0);
-        grid.add(datePurchased, 1, 0);
-        grid.add(new Label("Cost:"), 2, 0);
-        grid.add(cost, 3, 0);
-        
-        grid.add(new Label("VIN:"), 0, 1);
-        grid.add(vin, 1, 1);
-        grid.add(new Label("Year:"), 2, 1);
-        grid.add(year, 3, 1);
-        grid.add(new Label("Make:"), 4, 1);
-        grid.add(make, 5, 1);
-        grid.add(new Label("Model:"), 6, 1);
-        grid.add(model, 7, 1);
-        
-        grid.add(new Label(""), 0, 2);
-        grid.add(color, 1, 2);
-        grid.add(new Label(""), 2, 2);
-        grid.add(mileage, 3, 2);
-        grid.add(new Label(""), 4, 2);
-        grid.add(mpg, 5, 2);
-        grid.add(new Label(""), 6, 2);
-        grid.add(salesPrice, 7, 2);
-        
-        
-        
-        //Add grid to this pane
-        getChildren().add(grid);
-        
-      
-        //Set PurchaseOrderForm Styles (padding at 20, create border)
-        setPadding(new Insets(20));
-        setStyle("-fx-border-color: gray; -fx-border-width: 5px;");
-    }
-    
-    // Getters for all TextFields and the DatePicker
-    public TextField getCost() {
-    	return cost;
-    }
-    
-    public TextField getVin() {
-    	return vin;
-    }
-    
-    public TextField getYear() {
-    	return year;
-    }
-    
-    public TextField getMake() {
-    	return make;
-    }
-    
-    public TextField getModel() {
-    	return model;
-    }
-    
-    public TextField getColor() {
-    	return color;
-    }
-    
-    public TextField getMileage() {
-    	return mileage;
-    }
-    
-    public TextField getMpg() {
-    	return mpg;
-    }
-    
-    public TextField getSalesPrice() {
-    	return salesPrice;
-    }
-    
-    public DatePicker getDatePurchased() {
-    	return datePurchased;
-    }
+    grid.add(new Label("cost: "), 2, 0);
+    grid.add(cost = new TextField(), 3, 0);
+
+    // Row 1: vin label/textfield, year label/textfield, make label/textfield, model
+    // label/textfield
+
+    grid.add(new Label("VIN:"), 0, 1);
+    grid.add(vin = new TextField(), 1, 1);
+
+    grid.add(new Label("Year:"), 2, 1);
+    grid.add(year = new TextField(), 3, 1);
+
+    grid.add(new Label("Make:"), 4, 1);
+    grid.add(make = new TextField(), 5, 1);
+
+    grid.add(new Label("Model:"), 6, 1);
+    grid.add(model = new TextField(), 7, 1);
+
+    // Row 2: color label/textfield, mileage label/textfield, mpg label/textfield,
+    // salesPrice label/textfield
+
+    grid.add(new Label("Color:"), 0, 2);
+    grid.add(color = new TextField(), 1, 2);
+
+    grid.add(new Label("Mileage:"), 2, 2);
+    grid.add(mileage = new TextField(), 3, 2);
+
+    grid.add(new Label("MPG HWY:"), 4, 2);
+    grid.add(mpg = new TextField(), 5, 2);
+
+
+    // Add grid to this pane
+    this.getChildren().add(grid);
+
+    // Set PurchaseOrderForm Styles (padding at 20, create border)
+    this.setPadding(new Insets(20));
+    this.setStyle("-fx-border-color: gray; -fx-border-width: 5px;");
+  }
+
+  // Getters for all TextFields and the DatePicker
+  public DatePicker getDatePurchased() {
+    return datePurchased;
+  }
+
+  public TextField getVin() {
+    return vin;
+  }
+
+  public TextField getYear() {
+    return year;
+  }
+
+  public TextField getMake() {
+    return make;
+  }
+
+  public TextField getModel() {
+    return model;
+  }
+
+  public TextField getColor() {
+    return color;
+  }
+
+  public TextField getMileage() {
+    return mileage;
+  }
+
+  public TextField getMpg() {
+    return mpg;
+  }
+
+
+  public TextField getCost() {
+    return cost;
+  }
+
 }

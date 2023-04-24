@@ -17,7 +17,7 @@ import models.PurchaseOrder;
 
 /**
  *
- * @author AlexC
+ * @author Kevin McAlister
  */
 public class PurchaseOrderTable extends HBox{
     // TableView Reference
@@ -46,7 +46,7 @@ public class PurchaseOrderTable extends HBox{
         
         //Create the new Table Columns
         id = new TableColumn<>("ID");
-        datePurchased = new TableColumn<>("Prch Date");
+        datePurchased = new TableColumn<>("Purchase Date");
         vin = new TableColumn<>("VIN");
         year = new TableColumn<>("Year");
         make = new TableColumn<>("Make");
@@ -57,16 +57,16 @@ public class PurchaseOrderTable extends HBox{
         cost = new TableColumn<>("Cost");
         
         //Set Column Min Width
-        id.setMinWidth(200);
-        datePurchased.setMinWidth(200);
-        vin.setMinWidth(200);
-        year.setMinWidth(200);
-        make.setMinWidth(200);
-        model.setMinWidth(200);
-        color.setMinWidth(200);
-        mileage.setMinWidth(200);
-        mpg.setMinWidth(200);
-        cost.setMinWidth(200);
+        id.setMinWidth(100.00);
+        datePurchased.setMinWidth(100.00);
+        vin.setMinWidth(150.00);
+        year.setMinWidth(75.0);
+        make.setMinWidth(100.00);
+        model.setMinWidth(150.0);
+        color.setMinWidth(75.00);
+        mileage.setMinWidth(100.00);
+        mpg.setMinWidth(75.0);
+        cost.setMinWidth(100.00);
         
         
         //Get column cell values from PurchaseOrder data model 
@@ -83,7 +83,7 @@ public class PurchaseOrderTable extends HBox{
         color.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper(cellData.getValue().getCar().getColor()));
         mileage.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper(cellData.getValue().getCar().getMileage()));
         mpg.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper(cellData.getValue().getCar().getMpg()));
-        cost.setCellValueFactory(new PropertyValueFactory<> ("cost"));;
+        cost.setCellValueFactory(new PropertyValueFactory<> ("cost"));
         
         
         //Add columns to table

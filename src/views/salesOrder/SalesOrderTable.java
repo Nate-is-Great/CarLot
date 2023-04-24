@@ -4,12 +4,19 @@
  */
 package views.salesOrder;
 
+import java.time.LocalDate;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import models.SalesOrder;
+
+/**
+ *
+ * @author Michael Talerico
+ */
 
 public class SalesOrderTable extends HBox{
     // TableView Reference
@@ -18,7 +25,7 @@ public class SalesOrderTable extends HBox{
     //Table Column References (ID, dateSold, vin, year, make, model, color,
     // mileage, mpg, soldPrice, Don't Worry about Profit)
     private final TableColumn<SalesOrder, Integer> id;
-    private final TableColumn<SalesOrder, String> dateSold;
+    private final TableColumn<SalesOrder, LocalDate> dateSold;
     private final TableColumn<SalesOrder, String> vin;
     private final TableColumn<SalesOrder, Integer> year;
     private final TableColumn<SalesOrder, String> make;

@@ -17,21 +17,23 @@ import models.Car;
 
 /**
  *
- * @author AlexC
+ * @author Matthew Harris
  */
 public class PurchaseOrderDAO {
     //Reference for Prepared Statement
     private static PreparedStatement preparedStatement;
     
     //Reference for Get all Purchase Orders SQL statement (will need to join with car table to get all needed info)
-    private final static String SELECT_ALL_PURCHASE_ORDERS_STMT = "SELECT * FROM purchaseOrder INNERJOIN car ON purchaseOrder.vin = car.vin;";
+    private final static String SELECT_ALL_PURCHASE_ORDERS_STMT = "SELECT * FROM purchaseOrder INNER JOIN car ON purchaseOrder.vin = car.vin;";
     
     //Reference for Insert Purchase Order Stmt
-    private final static String ADD_PURCHASE_ORDER_STMT = "INSERT INTO purchaseOrder (id, vin, datePurchased, cost) VALUES (?, ?, ?, ?)";
+    private final static String ADD_PURCHASE_ORDER_STMT = "INSERT INTO purchaseOrder (vin, datePurchased, cost) VALUES (?, ?, ?)";
+    
+     
     
     
    //GET PURCHASE ORDERS
-    public static ObservableList<PurchaseOrder> getAllPurchaseOrderes() throws 
+    public static ObservableList<PurchaseOrder> getAllPurchaseOrders() throws 
             SQLException, ClassNotFoundException {
         
         try{
@@ -75,13 +77,12 @@ public class PurchaseOrderDAO {
             //Update Prepared Statement
                 // When updating the preparedStatement with the datePurchased you use the following format
                 // preparedStatement.setString(2, Date.valueOf(purchaseOrder.getDatePurchased()) + "");
-              preparedStatement.setString(1, purchaseOrder.getId() + "");
-              preparedStatement.setString(2, purchaseOrder.getVin()); 
-              preparedStatement.setString(3, Date.valueOf(purchaseOrder.getDatePurchased()) + "");
-              preparedStatement.setString(4, purchaseOrder.getCost() + "");
+              preparedStatement.setString(1, purchaseOrder.getCar().getVin()); 
+              preparedStatement.setString(2, Date.valueOf(purchaseOrder.getDatePurchased()) + "");
+              preparedStatement.setString(3, purchaseOrder.getCost() + "");
      
             //Run Update
-            
+            preparedStatement.executeUpdate();
         
         }catch(SQLException e){
              System.out.println("SQL purchase order insert operation has failed: " + e);
@@ -108,10 +109,10 @@ public class PurchaseOrderDAO {
                 //LocalDate datePurchased = resultSet.getDate("datePurchased").toLocalDate();             
           int year = resultSet.getInt("year");
           int id = resultSet.getInt("id");
-          int mileage = resultSet.getInt("milage"); 
+          int mileage = resultSet.getInt("mileage"); 
           int mpg = resultSet.getInt("mpg");
           double salesPrice = resultSet.getDouble("salesPrice");
-          double cost = resultSet.getCost("cost"); 
+          double cost = resultSet.getDouble("cost"); 
           String make = resultSet.getString("make");
           String model = resultSet.getString("model");
           String color = resultSet.getString("color");

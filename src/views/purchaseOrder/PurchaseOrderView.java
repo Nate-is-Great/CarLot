@@ -17,7 +17,7 @@ import javafx.scene.text.*;
 
 /**
  *
- * @author AlexC
+ * @author Kevin McAlister
  */
 public class PurchaseOrderView extends VBox{
     //References for PurchaseOrderTable purchaseOrderTable, PurchaseOrderForm purchaseOrderForm
@@ -26,10 +26,10 @@ public class PurchaseOrderView extends VBox{
     
      //References for TextField salesPrice
 	private final TextField salesPrice;
-	private final Label salesPriceLabel; // Necessary for the
+	
     
     //References for Buttons add ToInventoryBtn, Button cancelBtn
-	private final Button toInventoryBtn;
+	private final Button addToInventoryBtn;
 	private final Button cancelBtn;
     
     //Reference for error message text: Text errorMessage
@@ -39,7 +39,7 @@ public class PurchaseOrderView extends VBox{
     public PurchaseOrderView(){
         //Create Title
 		Text title = new Text("Purchase Order");
-		title.setFont(Font.font("Ariel", 30));
+		title.setFont(Font.font("Arial", FontWeight.BOLD, 30));
 		
         //Create PurchaseOrderTable for the Attribute Reference
 		purchaseOrderTable = new PurchaseOrderTable();
@@ -47,33 +47,16 @@ public class PurchaseOrderView extends VBox{
         //Create PurchaseOrderForm for the Attribute Reference
 		purchaseOrderForm = new PurchaseOrderForm();
         
-        //Create HBox for error message Text
-		HBox errorMessagePane = new HBox();
-    
-        //Set error message HBox Styles (alignment - center)
-		errorMessagePane.setAlignment(Pos.CENTER);
-    
-        //Create Text object for error message
-		errorMessage = new Text();
-    
-        //Set Text styles(Font(Arial,BOLD, 13), Fill(Color is red), Stroke(Color is red))
-		errorMessage.setFont(Font.font("Arial, FontWeight.BOLD, 13"));
-		errorMessage.setFill(Color.RED);
-		errorMessage.setStroke(Color.RED);
-    
-        //Add Text to error message HBox
-		errorMessagePane.getChildren().add(errorMessage);
         
         //Create HBox for the CarLot SalesPrice Label, SalesPrice TextField, and the two Buttons
 		HBox salesPricePane = new HBox();
     
         //Add CarLot Sales Price Label, salesPrice TextField, addToInventoryBtn, and cancelBtn to the
         // HBox
-		// label?
-		salesPricePane.getChildren().addAll(salesPriceLabel = new Label("Sales Price"), salesPrice = new TextField("Sales Price"), toInventoryBtn = new Button("To Inventory"), cancelBtn = new Button("Cancel"));
+		salesPricePane.getChildren().addAll(new Label("Sales Price:"), salesPrice = new TextField(), addToInventoryBtn = new Button("Add To Inventory"), cancelBtn = new Button("Cancel"));
     
         //Button Styles (PrefWidth - 150)
-		toInventoryBtn.setPrefWidth(150);
+		addToInventoryBtn.setPrefWidth(150);
 		cancelBtn.setPrefWidth(150);
    
         //HBox Style (Spacing is 20)
@@ -86,7 +69,7 @@ public class PurchaseOrderView extends VBox{
 		this.setSpacing(20);
         
         //Add title, table, errorMessagePane, form, and salesPrice/ButtonPane to this pane
-		this.getChildren().addAll(title, purchaseOrderTable, errorMessagePane, salesPricePane);
+		this.getChildren().addAll(title, purchaseOrderTable, purchaseOrderForm,salesPricePane);
    
     }
         
@@ -100,8 +83,8 @@ public class PurchaseOrderView extends VBox{
     	return purchaseOrderForm;
     }
     
-    public Button getToInventoryBtn() {
-    	return toInventoryBtn;
+    public Button getAddToInventoryBtn() {
+    	return addToInventoryBtn;
     }
     
     public Button getCancelBtn() {

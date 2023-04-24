@@ -12,23 +12,28 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
+/**
+ *
+ * @author Michael Talerico
+ */
+
 public class SalesOrderForm extends HBox {
 
     //TextField References
-    private final TextField tfVin = new TextField();
-    private final TextField tfYear = new TextField();
-    private final TextField tfMake = new TextField();
-    private final TextField tfModel = new TextField();
-    private final TextField tfColor = new TextField();
-    private final TextField tfMileage = new TextField();
-    private final TextField tfMpg = new TextField();
-    private final TextField tfPriceSold = new TextField();
+    private final TextField vin = new TextField();
+    private final TextField year = new TextField();
+    private final TextField make = new TextField();
+    private final TextField model = new TextField();
+    private final TextField color = new TextField();
+    private final TextField mileage = new TextField();
+    private final TextField mpg = new TextField();
+    private final TextField priceSold = new TextField();
 
     //DatePicker Reference (dateSold)
-    private final DatePicker dpDateSold = new DatePicker();
+    private final DatePicker dateSold = new DatePicker();
 
     //Car Button Reference
-    private final Button btGetCar = new Button("Get Car");
+    private final Button getCarBtn = new Button("Get Car");
 
     public SalesOrderForm(){
 
@@ -42,36 +47,36 @@ public class SalesOrderForm extends HBox {
         // Add Labels and TextFields to Grid with add(Node, col index, row index)
         // Row 0: vin label, vin TextField, and Get Car Button
         grid.add(new Label("VIN:"), 0, 0);
-        grid.add(tfVin, 1, 0);
-        grid.add(btGetCar, 2, 0);
+        grid.add(vin, 1, 0);
+        grid.add(getCarBtn, 2, 0);
         // Row 1: year label/textfield, make label/textfield, model label/textfield
         grid.add(new Label("Year:"), 0, 1);
-        grid.add(tfYear, 1, 1);
+        grid.add(year, 1, 1);
         grid.add(new Label("Make:"), 2, 1);
-        grid.add(tfMake, 3, 1);
+        grid.add(make, 3, 1);
         grid.add(new Label("Model:"), 4, 1);
-        grid.add(tfModel, 5, 1);
+        grid.add(model, 5, 1);
         // Row 2: color label/textfield, mileage label/textfield, mpg label/textfield
         grid.add(new Label("Color:"), 0, 2);
-        grid.add(tfColor, 1, 2);
+        grid.add(color, 1, 2);
         grid.add(new Label("Mileage:"), 2, 2);
-        grid.add(tfMileage, 3, 2);
+        grid.add(mileage, 3, 2);
         grid.add(new Label("MPG HWY:"), 4, 2);
-        grid.add(tfMpg, 5, 2);
+        grid.add(mpg, 5, 2);
         // Row 3: dateSold label/DatePicker, priceSold label/textfield
         grid.add(new Label("Date Sold:"), 0, 3);
-        grid.add(dpDateSold, 1, 3);
+        grid.add(dateSold, 1, 3);
         grid.add(new Label("Price Sold:"), 2, 3);
-        grid.add(tfPriceSold, 3, 3);
+        grid.add(priceSold, 3, 3);
 
         //Make textfields year, make, model, color, mileage, mpg UNEDITABLE using following format:
         // year.setEditable(false);
-        tfYear.setEditable(false);
-        tfMake.setEditable(false);
-        tfModel.setEditable(false);
-        tfColor.setEditable(false);
-        tfMileage.setEditable(false);
-        tfMpg.setEditable(false);
+        year.setEditable(false);
+        make.setEditable(false);
+        model.setEditable(false);
+        color.setEditable(false);
+        mileage.setEditable(false);
+        mpg.setEditable(false);
 
         //Add grid to this pane
         getChildren().add(grid);
@@ -85,43 +90,43 @@ public class SalesOrderForm extends HBox {
 
     //Getters for all TextFields, DatePicker, "Get Car" Button
     public TextField getVin() {
-        return tfVin;
+        return vin;
     }
 
     public TextField getYear() {
-        return tfYear;
+        return year;
     }
 
     public TextField getMake() {
-        return tfMake;
+        return make;
     }
 
     public TextField getModel() {
-        return tfModel;
+        return model;
     }
 
     public TextField getColor() {
-        return tfColor;
+        return color;
     }
 
     public TextField getMileage() {
-        return tfMileage;
+        return mileage;
     }
 
     public TextField getMpg() {
-        return tfMpg;
+        return mpg;
     }
 
     public TextField getPriceSold() {
-        return tfPriceSold;
+        return priceSold;
     }
 
     public DatePicker getDateSold() {
-        return dpDateSold;
+        return dateSold;
     }
 
-    public Button getGetCar() {
-        return btGetCar;
+    public Button getCarBtn() {
+        return getCarBtn;
     }
 
 }

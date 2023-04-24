@@ -5,7 +5,10 @@
 package carlot;
 
 import daos.CarDAO;
+import daos.PurchaseOrderDAO;
+import daos.SalesOrderDAO;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +20,8 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Car;
+import models.PurchaseOrder;
+import models.SalesOrder;
 import views.car.CarTable;
 import views.car.CarView;
 import views.purchaseOrder.PurchaseOrderView;
@@ -71,8 +76,8 @@ public class CarLot extends Application {
          */
          
         this.populateCarTable();
-        //this.populatePurchaseOrderTable();
-        //this.populateSalesOrderTable();
+        this.populatePurchaseOrderTable();
+        this.populateSalesOrderTable();
         
         
          /**
@@ -114,38 +119,68 @@ public class CarLot extends Application {
         
         
         //PurchaseOrder Add To Inventory Button Clicked
+        purchaseOrderView.getAddToInventoryBtn().setOnAction(e ->{
+            
             //Use textfield input to create purchase order
+            PurchaseOrder purchaseOrder = createPurchaseOrderFromTextFields();
             
             //Use PurchaseOrder attributes to add car and purchaseOrder to db
+            addCar(purchaseOrder.getCar());
+            addPurchaseOrder(purchaseOrder);
             
-            //Clear the Purchase Order Form textfields
+            //Clear the textfields
+            clearPurchaseOrderFormTextFields();
             
-            //Populate purchaseOrder table
+            //refresh purchaseOrder and car tables
+            populatePurchaseOrderTable();
+             
+        });
              
         
         //PurchaseOrder Cancel Button Clicked
-            //Clear the Purchase Order Form textfields
+        purchaseOrderView.getCancelBtn().setOnAction(e -> {
+            clearPurchaseOrderFormTextFields();
+        });
             
         
         //SalesOrder Get Button Car Clicked
-            //Get value from vin textfield in salesOrderView
+        salesOrderView.getSalesOrderForm().getCarBtn().setOnAction(e -> {
             
-            //Use vin to get car info via CARDAO method
+            try{
+                //Look up vin entered in textfield
+                String vinForCarToLookUp = salesOrderView.getSalesOrderForm().getVin().getText();
+        
+                //Use vin to get the car 
+                Car car = CarDAO.getCar(vinForCarToLookUp).get(0);
+                
+                //Use car info to fill textfields
+                populateSalesOrderFormCarInfoTextFields(car);
             
-            //Use car into to fill salesOrder car TextFields
+            }catch(SQLException | ClassNotFoundException ex){
+                System.out.println("Error populating table with car data from db.\n" + ex);
             
+            }
+        });
             
          //SalesOrder Process Sale Button Clicked
-            //Use SalesOrder Textfield values to create new SalesOrder
+        salesOrderView.getProcessSaleBtn().setOnAction(e -> {
+            //TODO CAR FIELDS in SALES ORDER SHOULD BE UNEDITABLE
             
-            //Add salesOrder to db
+            //Use textfield input to add SalesOrder to db
+            SalesOrder salesOrder = createSalesOrderFromTextfields();
+            addSalesOrder(salesOrder);
+            clearSalesOrderTextFields();
             
-            //Clear SalesOrder Form TextFields
+            //refresh Table
+            populateSalesOrderTable();
+         
+        });
             
-            //Populate SalesOrder Table
-            
+        
          //SalesOrder Cancel Button Clicked
-            //Clear SalesOrder Form TextFields
+        salesOrderView.getCancelBtn().setOnAction(e -> {
+            clearSalesOrderTextFields();
+        });  
         
     }
     
@@ -157,7 +192,7 @@ public class CarLot extends Application {
     private void populateCarTable(){
         try{
             //Use CarDAO to get list of cars from db
-            carView.getCarTable().getTable().setItems(CarDAO.getAllCars());
+            carView.getCarTable().getTable().setItems(CarDAO.getAllAvaliableCars());
             
         } catch(SQLException | ClassNotFoundException e) {
             System.out.println("Error populating table with car data for db.\n" + e);
@@ -214,8 +249,7 @@ public class CarLot extends Application {
        }
    
    }
-    
-    
+      
     // Car Form Clear TextFields
     private void clearCarFormTextFields(){
         carView.getCarForm().getVin().clear();
@@ -230,43 +264,126 @@ public class CarLot extends Application {
     
     //PURCHASE ORDER TABLE RELATED
     
-    //private void populatePurchaseOrderTable(){
-        //try{
+    private void populatePurchaseOrderTable(){
+        try{
             //Use PurchaseOrder DAO to get list of purchase orders from db
-            //purchaseOrderView.getPurchaseOrderTable().getTable().setItems(PurchaseOrderDAO.getAllPurchaseOrders());
-        //} catch(SQLException | ClassNotFoundException e) {
-            //System.out.println("Error populating table with car data for db.\n" + e);
-        //}
+            purchaseOrderView.getPurchaseOrderTable().getTable().setItems(PurchaseOrderDAO.getAllPurchaseOrders());
+        } catch(SQLException | ClassNotFoundException e) {
+            System.out.println("Error populating table with purchase order data from db.\n" + e);
+        }
+    }
     
-    //}
     
-    //private PurchaseOrder createPurchaseOrderFromTextFields(){}
+    private PurchaseOrder createPurchaseOrderFromTextFields(){
+        //Get each car and purchaseOrder attribute value from the purchaseOder form textfields
+        LocalDate datePurchased = purchaseOrderView.getPurchaseOrderForm().getDatePurchased().getValue();
+        double cost = Double.parseDouble(purchaseOrderView.getPurchaseOrderForm().getCost().getText());
+        String vin = purchaseOrderView.getPurchaseOrderForm().getVin().getText();
+        String make = purchaseOrderView.getPurchaseOrderForm().getMake().getText();
+        String model = purchaseOrderView.getPurchaseOrderForm().getModel().getText();
+        String color = purchaseOrderView.getPurchaseOrderForm().getColor().getText();
+        int year =  Integer.parseInt(purchaseOrderView.getPurchaseOrderForm().getYear().getText());
+        int mileage = Integer.parseInt(purchaseOrderView.getPurchaseOrderForm().getMileage().getText()); 
+        int mpg = Integer.parseInt(purchaseOrderView.getPurchaseOrderForm().getMpg().getText());
+        double salesPrice = Double.parseDouble(purchaseOrderView.getSalesPrice().getText());
+               
+        Car car = new Car(vin, year, make, model, color, mileage, mpg, salesPrice);
+        PurchaseOrder purchaseOrder = new PurchaseOrder(0, datePurchased, car, cost);
+        return purchaseOrder;
     
-    //private void addPurchaseOrder(PurchaseOrder purchaseOrder){}
+    }  
+
     
-    //private void clearPurchaseOrderFormTextFields(){}
+    
+    private void addPurchaseOrder(PurchaseOrder purchaseOrder){
+        try{
+            PurchaseOrderDAO.addPurchaseOrder(purchaseOrder);
+        }catch(SQLException | ClassNotFoundException e){
+            System.out.println("Error when attempting to add a purchaseOrder\n" + e);
+        }
+    }
+    
+    private void clearPurchaseOrderFormTextFields(){
+        purchaseOrderView.getPurchaseOrderForm().getDatePurchased().setValue(null);
+        purchaseOrderView.getPurchaseOrderForm().getCost().clear();
+        purchaseOrderView.getPurchaseOrderForm().getVin().clear();
+        purchaseOrderView.getPurchaseOrderForm().getMake().clear();
+        purchaseOrderView.getPurchaseOrderForm().getModel().clear();
+        purchaseOrderView.getPurchaseOrderForm().getColor().clear();
+        purchaseOrderView.getPurchaseOrderForm().getYear().clear();
+        purchaseOrderView.getPurchaseOrderForm().getMileage().clear(); 
+        purchaseOrderView.getPurchaseOrderForm().getMpg().clear();
+        purchaseOrderView.getSalesPrice().clear();
+    }
     
     
     //SALES ORDER TABLE RELATED
-    
-    //private void populateSalesOrderTable(){
-        //try{
+    private void populateSalesOrderTable(){
+        try{
             //Use SalesOrder DAO to get list of sales orders from db
-            //salesOrderView.getSalesOrderTable().getTable().setItems(SalesOrderDAO.getAllSalesOrders());
-        //} catch(SQLException | ClassNotFoundException e) {
-            //System.out.println("Error populating table with car data for db.\n" + e);
-        //}
+            salesOrderView.getSalesOrderTable().getTable().setItems(SalesOrderDAO.getAllSalesOrders());
+        } catch(SQLException | ClassNotFoundException e) {
+            System.out.println("Error populating table with car data for db.\n" + e);
+        }
     
-    //}
+    }
     
-    //private void populateSalesOrderFormCarInfoTextFields(Car car){}
+    private void populateSalesOrderFormCarInfoTextFields(Car car){
+        salesOrderView.getSalesOrderForm().getYear().setText(car.getYear() + "");
+        salesOrderView.getSalesOrderForm().getMake().setText(car.getMake());
+        salesOrderView.getSalesOrderForm().getModel().setText(car.getModel());
+        salesOrderView.getSalesOrderForm().getColor().setText(car.getColor());
+        salesOrderView.getSalesOrderForm().getMileage().setText(car.getMileage() + "");
+        salesOrderView.getSalesOrderForm().getMpg().setText(car.getMpg() + "");
+    }
     
-    //private SalesOrder createSalesOrderFromTextFields(){}
+    private SalesOrder createSalesOrderFromTextfields(){
+         //Get each car and purchaseOrder attribute value from the salesOrder form textfields
+        String vin = salesOrderView.getSalesOrderForm().getVin().getText();
+        LocalDate dateSold = salesOrderView.getSalesOrderForm().getDateSold().getValue();
+        double priceSold = Double.parseDouble(salesOrderView.getSalesOrderForm().getPriceSold().getText());
+        int year = Integer.parseInt(salesOrderView.getSalesOrderForm().getYear().getText());
+        int mileage = Integer.parseInt(salesOrderView.getSalesOrderForm().getMileage().getText());
+        String make = salesOrderView.getSalesOrderForm().getMake().getText();
+        String model = salesOrderView.getSalesOrderForm().getModel().getText();
+        String color = salesOrderView.getSalesOrderForm().getColor().getText();
+        int mpg = Integer.parseInt(salesOrderView.getSalesOrderForm().getMpg().getText());
+        double salesPrice = 0; //actual sales price not needed as just using info to create salesOrder
+        int salesOrderID = 0; //actual salesOrder ID added by db
+        
+        //Create Car
+        Car car = new Car(vin, year, make, model, color, mileage, mpg, salesPrice);
+        
+        //Create SalesOrder
+        SalesOrder salesOrder = new SalesOrder(salesOrderID, dateSold, car, priceSold);
     
-    //private void addSalesOrder(SalesOrder salesOrder){}
+        //Return SalesOrder
+        return salesOrder;
+    
+    } 
+    
+    private void addSalesOrder(SalesOrder salesOrder){
+        try{
+            SalesOrderDAO.addSalesOrder(salesOrder);
+        
+        }catch(SQLException | ClassNotFoundException e){
+            System.out.println("Error when attempting to add a salesOrder\n" + e);
+        }
+    }
     
     //private void clearSalesOrderTextFields90{}
-    
+    private void clearSalesOrderTextFields(){
+        salesOrderView.getSalesOrderForm().getVin().clear();
+        salesOrderView.getSalesOrderForm().getDateSold().setValue(null);
+        salesOrderView.getSalesOrderForm().getPriceSold().clear();
+        salesOrderView.getSalesOrderForm().getYear().clear();
+        salesOrderView.getSalesOrderForm().getMileage().clear();
+        salesOrderView.getSalesOrderForm().getMake().clear();
+        salesOrderView.getSalesOrderForm().getModel().clear();
+        salesOrderView.getSalesOrderForm().getColor().clear();
+        salesOrderView.getSalesOrderForm().getMpg().clear();
+ 
+    }
     
     public static void main(String[] args) {
         launch(args);

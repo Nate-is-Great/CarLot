@@ -41,25 +41,7 @@ public class CarView extends VBox{
         carTable = new CarTable();
         
         //New CarForm
-        carForm = new CarForm();
-        
-        //Create HBox for for error message text
-        HBox errorMessagePane = new HBox();
-        
-        //Set error pane styles (alignment)
-        errorMessagePane.setAlignment(Pos.CENTER);
-        
-        //Create Text for error message
-        errorMessage = new Text();
-        
-        //Set Text styles(Font, Fill, Stroke)
-        errorMessage.setFont(Font.font("Arial, FontWeight.BOLD, 13"));
-        errorMessage.setFill(Color.RED);
-        errorMessage.setStroke(Color.RED);
-        
-        //Add Text to error Pane
-        errorMessagePane.getChildren().add(errorMessage);
-        
+        carForm = new CarForm(); 
       
          //Create pane for buttons
         HBox buttonPane = new HBox();

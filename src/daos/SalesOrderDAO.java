@@ -28,13 +28,13 @@ public class SalesOrderDAO {
    private static PreparedStatement preparedStatement;
      
     //Reference for Select all SalesOrder SQL Statement (Will need to join with car table to get all info)
-    private final static String SELECT_ALL_SALES_ORDER_STMT = "SELECT * FROM salesOrder INNERJOIN car ON SalesOrder.vin = purchaseOrder.vin;";
+    private final static String SELECT_ALL_SALES_ORDER_STMT = "SELECT * FROM salesOrder INNER JOIN car ON salesOrder.vin = car.vin;";
    
     //Reference for Insert SalesOrder SQL Statement
-    private final static String ADD_SALES_ORDER_STMT = "INSERT INTO salesOrder (id, dateSold, vin, priceSold) VALUES (?, ?, ?, ?)"; 
+    private final static String ADD_SALES_ORDER_STMT = "INSERT INTO salesOrder (dateSold, vin, priceSold) VALUES (?, ?, ?)"; 
     
     //GET Sales ORDERS
-    public static ObservableList<SalesOrder> getAllSalesOrderes() throws 
+    public static ObservableList<SalesOrder> getAllSalesOrders() throws 
             SQLException, ClassNotFoundException {
         
         try{
@@ -79,11 +79,10 @@ public class SalesOrderDAO {
             
             //Update Prepared Statement
                 // When updating the preparedStatement with the datePurchased you use the following format
-                // preparedStatement.setString(2, Date.valueOf(salesOrder.getDateSold()) + "");
-              preparedStatement.setString(1, salesOrder.getId() + "");
-              preparedStatement.setString(2, Date.valueOf(salesOrder.getDateSold()) + "");
-              preparedStatement.setString(3, salesOrder.getCar().getVin()); 
-              preparedStatement.setString(4, salesOrder.getPriceSold() + "");
+                // preparedStatement.setString(1, Date.valueOf(salesOrder.getDateSold()) + "");
+              preparedStatement.setString(1, Date.valueOf(salesOrder.getDateSold()) + "");
+              preparedStatement.setString(2, salesOrder.getCar().getVin()); 
+              preparedStatement.setString(3, salesOrder.getPriceSold() + "");
             
             
             //Run Update
@@ -112,7 +111,7 @@ public class SalesOrderDAO {
          //vin, make, model, color, int mileage, int mpg, double salesPrice
           int year = resultSet.getInt("year");
           int id = resultSet.getInt("id");
-          int mileage = resultSet.getInt("milage"); 
+          int mileage = resultSet.getInt("mileage"); 
           int mpg = resultSet.getInt("mpg");
           double salesPrice = resultSet.getDouble("salesPrice");
           double priceSold = resultSet.getDouble("priceSold");
