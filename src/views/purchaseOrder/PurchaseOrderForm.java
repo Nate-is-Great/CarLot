@@ -44,7 +44,7 @@ public class PurchaseOrderForm extends HBox {
     grid.add(new Label("Date Purchased"), 0, 0);
     grid.add(this.datePurchased = new DatePicker(), 1, 0);
     
-    grid.add(new Label("cost: "), 2, 0);
+    grid.add(new Label("Cost: "), 2, 0);
     grid.add(cost = new TextField(), 3, 0);
 
     // Row 1: vin label/textfield, year label/textfield, make label/textfield, model
