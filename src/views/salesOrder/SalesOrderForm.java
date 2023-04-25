@@ -77,6 +77,15 @@ public class SalesOrderForm extends HBox {
         color.setEditable(false);
         mileage.setEditable(false);
         mpg.setEditable(false);
+        
+        // Gray out textfields
+        year.setStyle("-fx-background-color: rgb(233,228,228)");
+        make.setStyle("-fx-background-color: rgb(233,228,228)");
+        model.setStyle("-fx-background-color: rgb(233,228,228)");
+        color.setStyle("-fx-background-color: rgb(233,228,228)");
+        mileage.setStyle("-fx-background-color: rgb(233,228,228)");
+        mpg.setStyle("-fx-background-color: rgb(233,228,228)");
+        
 
         //Add grid to this pane
         getChildren().add(grid);
