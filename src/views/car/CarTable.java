@@ -50,7 +50,7 @@ public class CarTable extends HBox{
        vin.setMinWidth(150.0);
        year.setMinWidth(75.0);
        make.setMinWidth(100.0);
-       model.setMinWidth(100.0);
+       model.setMinWidth(150.0);
        color.setMinWidth(75.0);
        mileage.setMinWidth(100.0);
        mpg.setMinWidth(75);

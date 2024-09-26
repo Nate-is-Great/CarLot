@@ -8,8 +8,10 @@ import java.time.LocalDate;
 
 /**
  *
- * @author 
- *// // Nate completed SalesOrder please contact me if there is error ///ncleach@my.waketech.edu///
+
+ * @author Nate
+ */
+
 public class SalesOrder {
     //Attributes int id, LocalDate dateSold, Car car, double priceSold
     private int id;
@@ -18,9 +20,11 @@ public class SalesOrder {
     private double priceSold;
 
     //Constructor
+
    public SalesOrder(){
 
     }
+    
     public SalesOrder(int id, LocalDate dateSold, Car car, double priceSold){
     this.id = id;
     this.dateSold = dateSold;
@@ -43,9 +47,11 @@ public class SalesOrder {
         return priceSold;
     }
     //Setters
+
     public void setDateSold(LocalDate dateSold){
         this.dateSold = dateSold;
     }
+
     public void setId(int id){
         this.id = id;
     }

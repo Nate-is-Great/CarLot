@@ -22,14 +22,13 @@ public class CarDAO {
     private final static String SELECT_ALL_AVALIABLE_CARS_STMT = "SELECT * FROM car LEFT JOIN salesOrder ON car.vin = salesOrder.vin WHERE salesOrder.vin IS NULL;";
     private final static String UPDATE_CAR_STMT = "UPDATE car SET year = ?, make = ?, model = ?, color = ?, mileage = ?, mpg = ?, salesPrice = ? WHERE vin = ?";
     private final static String ADD_CAR_STMT = "INSERT INTO car (vin, year, make, model, color, mileage, mpg, salesPrice) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"; 
+    private final static String SELECT_CAR_STMT = "SELECT * FROM car WHERE vin = ?";
     
-    
-    //GET CAR
-    public static ObservableList<Car> getAllCars() throws 
+    //GET AVALIABLE CARS
+    public static ObservableList<Car> getAllAvaliableCars() throws 
             SQLException, ClassNotFoundException {
         
         try{
-            
             //Set up Connection
             DBConnection.dbConnect();
             
@@ -44,9 +43,40 @@ public class CarDAO {
             
             // Return list
             return carList;
+            
         }catch (SQLException e){
-            System.out.println("SQL car select operation has failed: " + e);
-            //Throw exception
+            System.out.println("SQL select all avaliable cars operation has failed: " + e);
+            //Return exception
+            throw e;
+        }
+    }
+    
+    //GET CAR
+    public static ObservableList<Car> getCar(String vin) throws 
+            SQLException, ClassNotFoundException {
+        
+        try{
+            //Set up Connection
+            DBConnection.dbConnect();
+            
+            //Create Prepared Statement
+            preparedStatement = DBConnection.getConnection().prepareStatement(SELECT_CAR_STMT);
+            
+            //Update Prepared Statement
+            preparedStatement.setString(1,vin );
+            
+           //Get ResultSet from executeQuery method
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            //Create List from ResultSet data
+            ObservableList<Car> carList = createCarListFromResultSet(resultSet);
+            
+            // Return list
+            return carList;
+            
+        }catch (SQLException e){
+            System.out.println("SQL select all avaliable cars operation has failed: " + e);
+            //Return exception
             throw e;
         }
     }
